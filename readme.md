@@ -1,6 +1,3 @@
-
-**`README.md`**
-```markdown
 # CS2 Stretched Launcher
 
 A simple Windows launcher for Counter-Strike 2 that:
