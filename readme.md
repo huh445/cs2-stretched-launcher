@@ -23,7 +23,7 @@ This program directly calls Windows display APIs to:
 ## 🖥️ Requirements
 - Windows 10/11 (64-bit)
 - Steam installed
-- .NET 8.0 Runtime (only if you use the small `--no-self-contained` build)
+- .NET 8.0 Runtime (only if you don't use the -standalone file.)
 
 ---
 
