@@ -39,7 +39,7 @@ If you just want to use it:
 
 ### Clone the repository
 ```bash
-git clone https://github.com/YOURUSERNAME/cs2-stretched-launcher.git
+git clone https://github.com/huh445/cs2-stretched-launcher.git
 cd cs2-stretched-launcher
 ```
 
