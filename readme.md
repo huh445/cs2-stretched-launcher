@@ -29,7 +29,7 @@ This program directly calls Windows display APIs to:
 
 ## 🚀 Running the Prebuilt EXE
 If you just want to use it:
-1. Download the latest **`CS2StretchedLauncher.exe`** from [Releases](https://github.com/YOURUSERNAME/cs2-stretched-launcher/releases)
+1. Download the latest **`CS2StretchedLauncher.exe`** from [Releases](https://github.com/huh445/cs2-stretched-launcher/releases)
 2. Place it anywhere (e.g., Desktop)
 3. Double-click to launch CS2 with stretched res
 
