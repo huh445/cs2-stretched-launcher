@@ -32,7 +32,8 @@ If you just want to use it:
 1. Download the latest **`CS2StretchedLauncher.exe`** from [Releases](https://github.com/huh445/cs2-stretched-launcher/releases)
 2. Place it anywhere (e.g., Desktop)
 3. Double-click to launch CS2 with stretched res
-   Note: If you don't leave the .json with it, it will default to 1280x960 and 1920x1080
+
+Note: If you don't leave the .json with it, it will default to 1280x960 and 1920x1080
 
 ---
 
