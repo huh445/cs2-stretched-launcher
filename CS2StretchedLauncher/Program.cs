@@ -2,28 +2,33 @@
 using CS2StretchedLauncher.Utilities;
 using System;
 using System.ComponentModel;
+using Microsoft.Extensions.Configuration;
 
 namespace CS2StretchedLauncher
 {
     internal static class Program
     {
-        // Hardcoded per your request
-        private const uint LOW_W = 1280, LOW_H = 960, LOW_BPP = 32;
-        private const uint HIGH_W = 1920, HIGH_H = 1080, HIGH_BPP = 32;
+        public readonly record struct DisplayMode(int Width, int Height, int ColorDepth);
 
         private static ResolutionManager? _res;
         private static GameLauncher? _launcher;
+        private static DisplaySettings? _settings;
 
         private static int Main()
         {
-            _res = new ResolutionManager(LOW_W, LOW_H, LOW_BPP, HIGH_W, HIGH_H, HIGH_BPP);
+            _settings = new DisplaySettings();
+
+            _res = new ResolutionManager(
+                _settings.Low.Width, _settings.Low.Height, _settings.Low.Depth,
+                _settings.High.Width, _settings.High.Height, _settings.High.Depth
+            );
+
             _launcher = new GameLauncher();
 
             AppDomain.CurrentDomain.ProcessExit += (_, __) => SafeRestore();
             Console.CancelKeyPress += (_, e) => { e.Cancel = true; SafeRestore(); Environment.Exit(0); };
 
-            // 1) Set desktop to 1280×960 (QRes-style: primary device, commit to registry, no forced Hz)
-            if (!_res.ApplyLow())
+            if (!_res.ChangeRes())
             {
                 Logger.Log("Failed to set 1280x960. Aborting.");
                 return 2;
@@ -31,7 +36,6 @@ namespace CS2StretchedLauncher
 
             try
             {
-                // 2) Launch CS2 via Steam
                 try
                 {
                     _launcher.LaunchSteamUri("steam://rungameid/730");
@@ -42,7 +46,6 @@ namespace CS2StretchedLauncher
                     return 3;
                 }
 
-                // 3) Wait for cs2 to start (up to 60s), then wait while running
                 if (_launcher.WaitForProcessToAppear("cs2", TimeSpan.FromSeconds(60)))
                 {
                     _launcher.WaitWhileProcessExists("cs2", TimeSpan.FromMilliseconds(750));
@@ -50,16 +53,16 @@ namespace CS2StretchedLauncher
 
                 return 0;
             }
+
             finally
             {
-                // 4) Restore desktop to 1920×1080
-                _res.RestoreHigh();
+                _res.RestoreOriginalRes();
             }
         }
 
         private static void SafeRestore()
         {
-            try { _res?.RestoreHigh(); } catch { /* swallow */ }
+            _res?.RestoreOriginalRes();
         }
     }
 }

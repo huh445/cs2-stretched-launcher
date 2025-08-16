@@ -7,17 +7,17 @@ namespace CS2StretchedLauncher.Services
 {
     internal sealed class ResolutionManager
     {
-        private readonly uint _lowW, _lowH, _lowBpp;
-        private readonly uint _highW, _highH, _highBpp;
+        private readonly uint _lowW, _lowH, _lowColorDepth;
+        private readonly uint _highW, _highH, _highColorDepth;
 
-        public ResolutionManager(uint lowW, uint lowH, uint lowBpp, uint highW, uint highH, uint highBpp)
+        public ResolutionManager(uint lowW, uint lowH, uint lowColorDepth, uint highW, uint highH, uint highColorDepth)
         {
-            _lowW = lowW; _lowH = lowH; _lowBpp = lowBpp;
-            _highW = highW; _highH = highH; _highBpp = highBpp;
+            _lowW = lowW; _lowH = lowH; _lowColorDepth = lowColorDepth;
+            _highW = highW; _highH = highH; _highColorDepth = highColorDepth;
         }
 
-        public bool ApplyLow()  => ApplyDesktopModeLikeQRes(_lowW,  _lowH,  _lowBpp);
-        public bool RestoreHigh() => ApplyDesktopModeLikeQRes(_highW, _highH, _highBpp);
+        public bool ChangeRes()  => ApplyDesktopRes(_lowW,  _lowH,  _lowColorDepth);
+        public bool RestoreOriginalRes() => ApplyDesktopRes(_highW, _highH, _highColorDepth);
 
         private static string? GetPrimaryDisplayName()
         {
@@ -33,15 +33,15 @@ namespace CS2StretchedLauncher.Services
             return null;
         }
 
-        // Mirror QRes: target primary device, set width/height/bpp, commit to registry, don't force Hz
-        private static bool ApplyDesktopModeLikeQRes(uint w, uint h, uint bpp)
+        // Mirror QRes: target primary device, set width/height/ColorDepth, commit to registry, don't force Hz
+        private static bool ApplyDesktopRes(uint w, uint h, uint ColorDepth)
         {
             var device = GetPrimaryDisplayName();
             var dm = CreateEmptyDevMode();
             dm.dmFields     = Native.DM_PELSWIDTH | Native.DM_PELSHEIGHT | Native.DM_BITSPERPEL;
             dm.dmPelsWidth  = w;
             dm.dmPelsHeight = h;
-            dm.dmBitsPerPel = bpp;
+            dm.dmBitsPerPel = ColorDepth;
 
             // Validate/apply fullscreen semantics first
             int r = Native.ChangeDisplaySettingsEx(device, ref dm, IntPtr.Zero, Native.CDS_FULLSCREEN, IntPtr.Zero);

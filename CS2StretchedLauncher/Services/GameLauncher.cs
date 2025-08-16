@@ -10,11 +10,7 @@ namespace CS2StretchedLauncher.Services
     {
         public void LaunchSteamUri(string uri)
         {
-            try
-            {
-                Process.Start(new ProcessStartInfo(uri) { UseShellExecute = true });
-            }
-            catch (Win32Exception) { throw; }
+            Process.Start(new ProcessStartInfo(uri) { UseShellExecute = true });
         }
 
         public bool WaitForProcessToAppear(string name, TimeSpan timeout)
