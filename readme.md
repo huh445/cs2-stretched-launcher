@@ -33,6 +33,8 @@ If you just want to use it:
 2. Place it anywhere (e.g., Desktop)
 3. Double-click to launch CS2 with stretched res
 
+Note: If you don't leave the .json with it, it will default to 1280x960 and 1920x1080
+
 ---
 
 ## 🛠️ Building from Source
