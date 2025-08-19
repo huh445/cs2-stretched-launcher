@@ -30,7 +30,7 @@ namespace CS2StretchedLauncher
 
             if (!_res.ChangeRes())
             {
-                Logger.Log("Failed to set 1280x960. Aborting.");
+                Logger.Log($"Failed to set {_settings.Low.Width}x{_settings.Low.Height}. Aborting.");
                 return 2;
             }
 

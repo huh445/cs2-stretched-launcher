@@ -41,8 +41,8 @@ namespace CS2StretchedLauncher.Services
             uint Depth = uint.Parse(config);
             if (Depth is not (16 or 24 or 30 or 32))
             {
-                Logger.Log($"Depth is not set to acceptable value, it is set to: {Depth}. Setting to 16");
-                return 16;
+                Logger.Log($"Depth is not set to acceptable value, it is set to: {Depth}. Setting to 32");
+                return 32;
             }
             return Depth;
 
