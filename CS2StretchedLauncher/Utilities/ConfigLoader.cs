@@ -9,18 +9,18 @@ namespace CS2StretchedLauncher
         {
             // Build config from JSON
             IConfigurationRoot config = new ConfigurationBuilder()
-                .AddJsonFile(filename, optional: false, reloadOnChange: true)
+                .AddJsonFile(filename, optional: true, reloadOnChange: true)
                 .Build();
 
             var low = new DisplaySettings.Resolution(
-                config.GetValue<uint>("Display:Low:Width"),
-                config.GetValue<uint>("Display:Low:Height"),
+                config.GetValue<uint>("Display:Low:Width", 1280),
+                config.GetValue<uint>("Display:Low:Height", 720),
                 config.GetValue<uint>("Display:Low:Depth", 32)
             );
 
             var high = new DisplaySettings.Resolution(
-                config.GetValue<uint>("Display:High:Width"),
-                config.GetValue<uint>("Display:High:Height"),
+                config.GetValue<uint>("Display:High:Width", 1920),
+                config.GetValue<uint>("Display:High:Height", 1080),
                 config.GetValue<uint>("Display:High:Depth", 32)
             );
 
