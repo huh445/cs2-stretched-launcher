@@ -5,7 +5,7 @@ using CS2StretchedLauncher.Utilities;
 
 namespace CS2StretchedLauncher
 {
-    class DisplaySettings
+    internal class DisplaySettings
     {
         public readonly record struct Resolution(uint Width, uint Height, uint Depth = 32);
 
