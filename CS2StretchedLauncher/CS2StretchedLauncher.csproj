@@ -30,11 +30,11 @@
 
   <!-- Ensure appsettings.json is available next to the exe -->
   <ItemGroup>
-    <None Include="appsettings.json">
+    <None Include="settings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <!-- Optional: dev-time overrides -->
-    <None Include="appsettings.Development.json" Condition="Exists('appsettings.Development.json')">
+    <None Include="settings.Development.json" Condition="Exists('settings.Development.json')">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

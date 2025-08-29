@@ -3,20 +3,18 @@ using CS2StretchedLauncher.Utilities;
 using System;
 using System.ComponentModel;
 using Microsoft.Extensions.Configuration;
-
+ 
 namespace CS2StretchedLauncher
 {
     internal static class Program
     {
-        public readonly record struct DisplayMode(int Width, int Height, int ColorDepth);
 
         private static ResolutionManager? _res;
         private static GameLauncher? _launcher;
-        private static DisplaySettings? _settings;
 
         private static int Main()
         {
-            _settings = new DisplaySettings();
+            var _settings = ConfigLoader.Load();
 
             _res = new ResolutionManager(
                 _settings.Low.Width, _settings.Low.Height, _settings.Low.Depth,
