@@ -8,19 +8,18 @@ namespace CS2StretchedLauncher
 {
     internal static class Program
     {
-        public readonly record struct DisplayMode(int Width, int Height, int ColorDepth);
 
         private static ResolutionManager? _res;
         private static GameLauncher? _launcher;
-        private static DisplaySettings? _settings;
 
         private static int Main()
         {
-            _settings = new DisplaySettings();
+            var _low = new DisplaySettings.Resolution();
+            var _high = new DisplaySettings.Resolution();
 
             _res = new ResolutionManager(
-                _settings.Low.Width, _settings.Low.Height, _settings.Low.Depth,
-                _settings.High.Width, _settings.High.Height, _settings.High.Depth
+                _low.Width, _low.Height, _low.Depth,
+                _high.Width, _high.Height, _high.Depth
             );
 
             _launcher = new GameLauncher();
@@ -30,7 +29,7 @@ namespace CS2StretchedLauncher
 
             if (!_res.ChangeRes())
             {
-                Logger.Log($"Failed to set {_settings.Low.Width}x{_settings.Low.Height}. Aborting.");
+                Logger.Log($"Failed to set {_low.Width}x{_low.Height}. Aborting.");
                 return 2;
             }
 
