@@ -3,7 +3,7 @@ using CS2StretchedLauncher.Utilities;
 using System;
 using System.ComponentModel;
 using Microsoft.Extensions.Configuration;
-
+ 
 namespace CS2StretchedLauncher
 {
     internal static class Program
@@ -14,12 +14,11 @@ namespace CS2StretchedLauncher
 
         private static int Main()
         {
-            var _low = new DisplaySettings.Resolution();
-            var _high = new DisplaySettings.Resolution();
+            var _settings = ConfigLoader.Load();
 
             _res = new ResolutionManager(
-                _low.Width, _low.Height, _low.Depth,
-                _high.Width, _high.Height, _high.Depth
+                _settings.Low.Width, _settings.Low.Height, _settings.Low.Depth,
+                _settings.High.Width, _settings.High.Height, _settings.High.Depth
             );
 
             _launcher = new GameLauncher();
@@ -29,7 +28,7 @@ namespace CS2StretchedLauncher
 
             if (!_res.ChangeRes())
             {
-                Logger.Log($"Failed to set {_low.Width}x{_low.Height}. Aborting.");
+                Logger.Log($"Failed to set {_settings.Low.Width}x{_settings.Low.Height}. Aborting.");
                 return 2;
             }
 

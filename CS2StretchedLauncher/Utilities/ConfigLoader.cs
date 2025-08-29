@@ -1,17 +1,30 @@
-using System.Text.Json;
+using Microsoft.Extensions.Configuration;
+using CS2StretchedLauncher.Services;
 
-class ConfigLoader
+namespace CS2StretchedLauncher
 {
-    public static ConfigLoader Load(string filename)
+    internal static class ConfigLoader
     {
-        string json = File.ReadAllText(filename);
-
-        var options = new JsonSerializerOptions
+        public static DisplaySettings Load(string filename = "settings.json")
         {
-            PropertyNameCaseInsensitive = true
-        };
+            // Build config from JSON
+            IConfigurationRoot config = new ConfigurationBuilder()
+                .AddJsonFile(filename, optional: false, reloadOnChange: true)
+                .Build();
 
-        var root = JsonSerializer.Deserialize<Dictionary<string, ConfigLoader>>(json, options);
-        return root["Display"];
+            var low = new DisplaySettings.Resolution(
+                config.GetValue<uint>("Display:Low:Width"),
+                config.GetValue<uint>("Display:Low:Height"),
+                config.GetValue<uint>("Display:Low:Depth", 32)
+            );
+
+            var high = new DisplaySettings.Resolution(
+                config.GetValue<uint>("Display:High:Width"),
+                config.GetValue<uint>("Display:High:Height"),
+                config.GetValue<uint>("Display:High:Depth", 32)
+            );
+
+            return new DisplaySettings(low, high);
+        }
     }
 }
