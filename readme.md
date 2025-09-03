@@ -23,7 +23,7 @@ This program directly calls Windows display APIs to:
 ## 🖥️ Requirements
 - Windows 10/11 (64-bit)
 - Steam installed
-- .NET 8.0 Runtime (only if you don't use the -standalone file.)
+- .NET 9.0 Runtime (only if you don't use the -standalone file.)
 
 ---
 
@@ -52,12 +52,11 @@ dotnet build -c Release
 
 ### Publish (Portable EXE)
 ```bash
-# Requires .NET 8 SDK installed
 dotnet publish -c Release -r win-x64 -p:PublishSingleFile=true --no-self-contained
 ```
 Output will be in:
 ```
-bin/Release/net8.0/win-x64/publish/CS2StretchedLauncher.exe
+bin/Release/net9.0/win-x64/publish/CS2StretchedLauncher.exe
 ```
 
 ### Publish (Self-contained EXE)
@@ -69,6 +68,4 @@ This version runs on systems without .NET installed (larger file size).
 ---
 
 ## ⚠️ Notes
-- Only supports single-monitor setups by default. Multi-monitor support may be added later.
-- Resolutions are hardcoded in `Program.cs` — edit `LOW_W`, `LOW_H`, `HIGH_W`, `HIGH_H` to change.
 - The program commits resolution changes to the registry so Windows/DWM treats them as the actual desktop resolution.
