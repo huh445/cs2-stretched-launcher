@@ -1,4 +1,4 @@
-namespace CS2StretchedLauncher
+namespace CS2StretchedLauncher.Utilities
 {
     public readonly record struct Resolution(uint Width, uint Height, uint Depth = 32);
 

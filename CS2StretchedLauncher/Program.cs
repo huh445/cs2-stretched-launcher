@@ -3,7 +3,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using CS2StretchedLauncher.Services;
 using CS2StretchedLauncher.Utilities;
-using CS2StretchedLauncher.Tools;
 
 namespace CS2StretchedLauncher
 {

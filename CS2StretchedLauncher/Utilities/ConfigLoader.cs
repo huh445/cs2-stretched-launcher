@@ -1,14 +1,11 @@
 using Microsoft.Extensions.Configuration; // still referenced for future, but we now rely on store
 using CS2StretchedLauncher.Services;
-using CS2StretchedLauncher.Utilities;
 
-namespace CS2StretchedLauncher
+namespace CS2StretchedLauncher.Utilities
 {
     internal static class ConfigLoader
     {
-        /// <summary>
-        /// Loads settings from %APPDATA% and adapts to DisplaySettings (used by the rest of the app).
-        /// </summary>
+
         public static DisplaySettings Load(string _ = null!)
         {
             var store = new JsonSettingsStore();
