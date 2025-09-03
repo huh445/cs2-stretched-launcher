@@ -1,28 +1,21 @@
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration; // still referenced for future, but we now rely on store
 using CS2StretchedLauncher.Services;
+using CS2StretchedLauncher.Utilities;
 
 namespace CS2StretchedLauncher
 {
     internal static class ConfigLoader
     {
-        public static DisplaySettings Load(string filename = "settings.json")
+        /// <summary>
+        /// Loads settings from %APPDATA% and adapts to DisplaySettings (used by the rest of the app).
+        /// </summary>
+        public static DisplaySettings Load(string _ = null!)
         {
-            // Build config from JSON
-            IConfigurationRoot config = new ConfigurationBuilder()
-                .AddJsonFile(filename, optional: true, reloadOnChange: true)
-                .Build();
+            var store = new JsonSettingsStore();
+            var app = store.Load();
 
-            var low = new DisplaySettings.Resolution(
-                config.GetValue<uint>("Display:Low:Width", 1280),
-                config.GetValue<uint>("Display:Low:Height", 720),
-                config.GetValue<uint>("Display:Low:Depth", 32)
-            );
-
-            var high = new DisplaySettings.Resolution(
-                config.GetValue<uint>("Display:High:Width", 1920),
-                config.GetValue<uint>("Display:High:Height", 1080),
-                config.GetValue<uint>("Display:High:Depth", 32)
-            );
+            var low = new DisplaySettings.Resolution(app.Low.Width, app.Low.Height, app.Low.Depth);
+            var high = new DisplaySettings.Resolution(app.High.Width, app.High.Height, app.High.Depth);
 
             return new DisplaySettings(low, high);
         }

@@ -1,9 +1,11 @@
 ﻿using CS2StretchedLauncher.Services;
 using CS2StretchedLauncher.Utilities;
+using CS2StretchedLauncher.Tools;
 using System;
 using System.ComponentModel;
 using Microsoft.Extensions.Configuration;
- 
+
+
 namespace CS2StretchedLauncher
 {
     internal static class Program
@@ -14,6 +16,11 @@ namespace CS2StretchedLauncher
 
         private static int Main()
         {
+            if (Environment.GetCommandLineArgs().Any(a =>
+                string.Equals(a, "--settings", StringComparison.OrdinalIgnoreCase)))
+            {
+                return ConsoleConfigurator.Run();
+            }
             var _settings = ConfigLoader.Load();
 
             _res = new ResolutionManager(
