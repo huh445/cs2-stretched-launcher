@@ -27,6 +27,7 @@ namespace CS2StretchedLauncher
 
         private static int Main(string[] args)
         {
+            Logger.Log("Started CS2StretchedLauncher");
             if (IsSettingsMode(args))
             {
                 ConsoleHost.Run(() => ConsoleConfigurator.Run());
@@ -64,6 +65,7 @@ namespace CS2StretchedLauncher
                     Logger.Log("CS2 process did not appear within 30s.");
                 }
 
+                Logger.Log("CS2 closed. Restoring original res...");
                 _res.RestoreOriginalRes();
                 return 0;
             }

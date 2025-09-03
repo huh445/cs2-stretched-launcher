@@ -62,7 +62,7 @@ namespace CS2StretchedLauncher.Services
             {
                 dmDeviceName = new string('\0', 32),
                 dmFormName   = new string('\0', 32),
-                dmSize       = (ushort)Marshal.SizeOf(typeof(Native.DEVMODE))
+                dmSize       = (ushort)Marshal.SizeOf<Native.DEVMODE>()
             };
         }
     }
