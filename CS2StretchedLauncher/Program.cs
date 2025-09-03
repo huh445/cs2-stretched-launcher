@@ -1,73 +1,93 @@
-﻿using CS2StretchedLauncher.Services;
+﻿using System;
+using System.Linq;
+using System.Runtime.InteropServices;
+using CS2StretchedLauncher.Services;
 using CS2StretchedLauncher.Utilities;
 using CS2StretchedLauncher.Tools;
-using System;
-using System.ComponentModel;
-using Microsoft.Extensions.Configuration;
-
 
 namespace CS2StretchedLauncher
 {
     internal static class Program
     {
-
         private static ResolutionManager? _res;
         private static GameLauncher? _launcher;
-
-        private static int Main()
+        private static class ConsoleHost
         {
-            if (Environment.GetCommandLineArgs().Any(a =>
-                string.Equals(a, "--settings", StringComparison.OrdinalIgnoreCase)))
+            [DllImport("kernel32.dll", SetLastError = true)]
+            private static extern bool AllocConsole();
+            [DllImport("kernel32.dll", SetLastError = true)]
+            private static extern bool FreeConsole();
+
+            public static void Run(Action work)
             {
-                return ConsoleConfigurator.Run();
+                AllocConsole();
+                try { work(); }
+                finally { FreeConsole(); }
             }
-            var _settings = ConfigLoader.Load();
+        }
 
-            _res = new ResolutionManager(
-                _settings.Low.Width, _settings.Low.Height, _settings.Low.Depth,
-                _settings.High.Width, _settings.High.Height, _settings.High.Depth
-            );
-
-            _launcher = new GameLauncher();
+        private static int Main(string[] args)
+        {
+            if (IsSettingsMode(args))
+            {
+                ConsoleHost.Run(() => ConsoleConfigurator.Run());
+                return 0;
+            }
 
             AppDomain.CurrentDomain.ProcessExit += (_, __) => SafeRestore();
-            Console.CancelKeyPress += (_, e) => { e.Cancel = true; SafeRestore(); Environment.Exit(0); };
-
-            if (!_res.ChangeRes())
-            {
-                Logger.Log($"Failed to set {_settings.Low.Width}x{_settings.Low.Height}. Aborting.");
-                return 2;
-            }
+            Console.CancelKeyPress += (_, __) => SafeRestore();
 
             try
             {
-                try
+                var cfg = ConfigLoader.Load();
+
+                _res = new ResolutionManager(
+                    cfg.Low.Width,  cfg.Low.Height,  cfg.Low.Depth,
+                    cfg.High.Width, cfg.High.Height, cfg.High.Depth);
+
+                _launcher = new GameLauncher();
+
+                if (!ApplyLowResolution())
                 {
-                    _launcher.LaunchSteamUri("steam://rungameid/730");
-                }
-                catch (Win32Exception ex)
-                {
-                    Logger.Log("Failed to open Steam URI: " + ex.Message);
-                    return 3;
+                    Logger.Log("Failed to set low resolution. Aborting launch.");
+                    return 1;
                 }
 
-                if (_launcher.WaitForProcessToAppear("cs2", TimeSpan.FromSeconds(60)))
+                _launcher.LaunchSteamUri("steam://rungameid/730");
+
+                if (_launcher.WaitForProcessToAppear("cs2", TimeSpan.FromSeconds(30)))
                 {
-                    _launcher.WaitWhileProcessExists("cs2", TimeSpan.FromMilliseconds(750));
+                    Logger.Log("CS2 launched. Monitoring until exit…");
+                    _launcher.WaitWhileProcessExists("cs2", TimeSpan.FromSeconds(1));
+                }
+                else
+                {
+                    Logger.Log("CS2 process did not appear within 30s.");
                 }
 
+                _res.RestoreOriginalRes();
                 return 0;
             }
 
             finally
             {
-                _res.RestoreOriginalRes();
+                SafeRestore();
             }
+        }
+
+        private static bool IsSettingsMode(string[] args) =>
+            args.Any(a => string.Equals(a, "--settings", StringComparison.OrdinalIgnoreCase) ||
+                          string.Equals(a, "config", StringComparison.OrdinalIgnoreCase));
+
+        private static bool ApplyLowResolution()
+        {
+            return _res!.GetType().GetMethod("ApplyLowRes")?.Invoke(_res, null) as bool? ?? true;
+            
         }
 
         private static void SafeRestore()
         {
-            _res?.RestoreOriginalRes();
+            try { _res?.RestoreOriginalRes(); } catch { }
         }
     }
 }
