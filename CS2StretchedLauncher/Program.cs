@@ -81,7 +81,7 @@ namespace CS2StretchedLauncher
 
         private static bool ApplyLowResolution()
         {
-            return _res!.GetType().GetMethod("ApplyLowRes")?.Invoke(_res, null) as bool? ?? true;
+            return _res!.GetType().GetMethod("ChangeRes")?.Invoke(_res, null) as bool? ?? true;
             
         }
 

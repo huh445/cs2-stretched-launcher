@@ -16,6 +16,7 @@ namespace CS2StretchedLauncher
 
             var low = new DisplaySettings.Resolution(app.Low.Width, app.Low.Height, app.Low.Depth);
             var high = new DisplaySettings.Resolution(app.High.Width, app.High.Height, app.High.Depth);
+            Logger.Log($"Low res: {low.Width}x{low.Height}");
 
             return new DisplaySettings(low, high);
         }
