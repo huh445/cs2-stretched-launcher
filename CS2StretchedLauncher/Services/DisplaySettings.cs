@@ -3,7 +3,7 @@ using CS2StretchedLauncher.Utilities;
 
 
 
-namespace CS2StretchedLauncher
+namespace CS2StretchedLauncher.Services
 {
     internal class DisplaySettings
     {
