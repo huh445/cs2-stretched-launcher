@@ -1,7 +1,6 @@
 using System;
-using CS2StretchedLauncher.Utilities;
 
-namespace CS2StretchedLauncher.Tools
+namespace CS2StretchedLauncher.Utilities
 {
     public static class ConsoleConfigurator
     {

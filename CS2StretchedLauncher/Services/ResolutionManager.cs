@@ -5,16 +5,10 @@ using System.Runtime.InteropServices;
 
 namespace CS2StretchedLauncher.Services
 {
-    internal sealed class ResolutionManager
+    internal sealed class ResolutionManager(uint lowW, uint lowH, uint lowColorDepth, uint highW, uint highH, uint highColorDepth)
     {
-        private readonly uint _lowW, _lowH, _lowColorDepth;
-        private readonly uint _highW, _highH, _highColorDepth;
-
-        public ResolutionManager(uint lowW, uint lowH, uint lowColorDepth, uint highW, uint highH, uint highColorDepth)
-        {
-            _lowW = lowW; _lowH = lowH; _lowColorDepth = lowColorDepth;
-            _highW = highW; _highH = highH; _highColorDepth = highColorDepth;
-        }
+        private readonly uint _lowW = lowW, _lowH = lowH, _lowColorDepth = lowColorDepth;
+        private readonly uint _highW = highW, _highH = highH, _highColorDepth = highColorDepth;
 
         public bool ChangeRes()  => ApplyDesktopRes(_lowW,  _lowH,  _lowColorDepth);
         public bool RestoreOriginalRes() => ApplyDesktopRes(_highW, _highH, _highColorDepth);
@@ -68,7 +62,7 @@ namespace CS2StretchedLauncher.Services
             {
                 dmDeviceName = new string('\0', 32),
                 dmFormName   = new string('\0', 32),
-                dmSize       = (ushort)Marshal.SizeOf(typeof(Native.DEVMODE))
+                dmSize       = (ushort)Marshal.SizeOf<Native.DEVMODE>()
             };
         }
     }
